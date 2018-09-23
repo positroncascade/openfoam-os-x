@@ -2,23 +2,24 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+import sys
 
 __version__ = '0.0.1'
 __author__ = 'Alexey Matveichev'
 
-__COMMITS = {
+COMMITS = {
     'RELEASES': {
-        '2.3.1': '8bff3a6',
-        '2.4.0': 'cbfb16f',
-        '3.0.0': '9bdcbc8',
-        '3.0.1': 'bb00c1f'
+        '4.0': '068045d',
+        '4.1': '40e815b',
+        '5.0': 'fe83070'
     },
     'ROLLING': {
-        '2.2.x': '1f35a0f',
-        '2.3.x': '2f9138f',
+        '2.2.x': '1f35a0ff',
         '2.4.x': '2b147f4',
-        '3.0.x': 'f5fbd39',
-        'dev': '665b1f8'
+        '3.0.x': 'ec1903cb',
+        '4.x': '56a4152a9',
+        '5.x': '718111a3b',
+        'dev': '1bb7db2b7'
     }
 }
 
@@ -35,6 +36,18 @@ def _make_patch(version, start):
 
     print('Creating patch for OpenFOAM-{0}'.format(version))
     os.chdir('OpenFOAM-{0}'.format(version))
+
+    # Commit uncommitted changes
+    dirty = subprocess.call(['git', 'diff-files', '--quiet'])
+    if dirty == 1:
+        print('Committing everything.')
+        subprocess.call(['git', 'commit', '-a', '-m', 'mkpatches'])
+
+    try:
+        subprocess.check_output(['git', 'commit', '-a', '-m', 'Fix'],
+                                stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError:
+        pass
     diff = subprocess.check_output(['git', 'diff', '--patch-with-stat', start,
                                     'HEAD'])
     os.chdir('..')
@@ -60,15 +73,25 @@ def _make_patches():
     parser.add_argument('-n', '--only', action='store',
                         dest='version', nargs='+',
                         help='Create patches only for given versions')
+    parser.add_argument('-i', '--initial-commit', action='store',
+                        dest='commit', nargs=1)
     options = parser.parse_args()
 
-    for release_type, pairs in sorted(__COMMITS.items()):
+    for release_type, pairs in sorted(COMMITS.items()):
         for version, commit in pairs.items():
             if options.version is not None:
                 if version in options.version:
-                    _make_patch(version, commit)
+                    try:
+                        _make_patch(version, commit)
+                    except RuntimeError:
+                        return 127
             else:
-                _make_patch(version, commit)
+                try:
+                    _make_patch(version, commit)
+                except RuntimeError:
+                    return 127
+    return 0
 
 if __name__ == '__main__':
-    _make_patches()
+    import sys
+    sys.exit(_make_patches())

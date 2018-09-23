@@ -1,7 +1,126 @@
-# OpenFOAM on OS X
+# OpenFOAM(R) on OS X
 
-Patches for OpenFOAM compilation on OS X. Detailed installation instructions
-can be found in [wiki](https://github.com/mrklein/openfoam-os-x/wiki).
+Patches for OpenFOAM(R) compilation on macOS. Detailed installation
+instructions can be found in
+[wiki](https://github.com/mrklein/openfoam-os-x/wiki).
+
+## Disclaimer
+
+This offering is not approved or endorsed by OpenCFD Limited, producer and
+distributor of the OpenFOAM software via www.openfoam.com, and owner of the
+OPENFOAM(R)  and OpenCFD(R)  trade marks.
+
+## Acknowledgement
+
+OPENFOAM(R)  is a registered trade mark of OpenCFD Limited, producer and
+distributor of the OpenFOAM software via www.openfoam.com.
+
+## Sept. 8, 2018
+
+Updated version 6 and dev patches.
+
+## July 28, 2018
+
+Added patches for version 6.
+
+Someone in the Foundation hates versioning, so now it is impossible to
+distinguish release (let's call it 6.0) from bug-fixes version (6.x). Guess,
+next step will be to abandon versions at all.
+
+## May 23, 2018
+
+Updated dev patch.
+
+dev branch `wmkdep` now makes certain substitutions in dep files (-R command
+line switches). It fails to do it properly if `-R /` is passed to the command.
+
+There were two possibilities: either to modify `wmake/rules/General/transform`
+by removing line `-R '$(WM_THIRD_PARTY_DIR)/' '$$(WM_THIRD_PARTY_DIR)/' \`, or
+add check for `/` search pattern in `wmkdep.l`. Opted for latter.
+
+## May 22, 2018
+
+- Updated 5.x patch.
+- In dev branch some fancy modifications to `wmkdep` were made, so I have decided
+  to postpone patch update for this version.
+
+## Apr. 14, 2018
+
+Updated 5.x and dev patches.
+
+## Nov. 25, 2017
+
+Updated 5.x and dev patches. Since Foundation decided to abandon version
+numbering, 5.0 patch will not receive any updates or corrections.
+
+## Aug. 11, 2017
+
+Update
+
+- Added patches for versions 5.0 and 5.x (they already started to diverge).
+- Updated patches for 4.0, 4.1, and 4.x to remedy a problem of 64-bit label build reported here: https://www.cfd-online.com/Forums/openfoam-installation-windows-mac/187102-installing-openfoam-4-1-mac-os-sierra.html#post658361.
+
+`WM_QUIET_RULES` are temporary gone in 5.x series.
+
+## May 13, 2017
+
+wmake unification made it simpler to update patches, so returned 3.0.x and dev
+into tree (it seems 3.0.x is still widely used), updated foamJob script
+to account for macOS releases greater than 15.
+
+## May 8, 2017
+
+Update.
+
+- Only 2.2.x, 2.4.x, 4.0, 4.1, and 4.x patches are kept. Other versions
+  could appear later, but since I do not use them, odds are rather low (old
+  patches still can be found in repository history).
+- wmake is unified across versions (with `WM_QUIET_RULES`, to reduce noise in
+  log-files).
+- Latest CLT update requires addition of `-Wno-undefined-var-template` to avoid
+  excess of warnings.
+- Paraview configuration file now looks for Paraview\*.app, this resolves #32.
+- Check for wxt terminal is added to foamMonitor script, a workaround for #31.
+- IOobject emits mode-line for vi and adds foamVersion to header.
+
+Build process was tested on
+
+```
+$ sw_vers
+ProductName:	Mac OS X
+ProductVersion:	10.12.4
+BuildVersion:	16E195
+```
+
+with
+
+```
+$ clang++ --version
+Apple LLVM version 8.1.0 (clang-802.0.42)
+Target: x86_64-apple-darwin16.5.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+```
+
+and the following third-party software
+
+```
+$ brew list --versions
+...
+boost 1.63.0
+cgal 4.9.1
+eigen 3.3.3
+gmp 6.1.2
+gnuplot 5.0.6
+isl 0.18
+libmpc 1.0.3
+metis 5.1.0
+mpfr 3.1.5
+open-mpi 2.1.0
+parmetis 4.0.3_4
+scotch 6.0.4_4
+...
+```
 
 ## Oct. 28, 2016
 
@@ -182,7 +301,7 @@ scotch 6.0.4_1
 Though OpenCFD distributes Docker images for OS X, to me native compilation
 looks more convenient (for people who does not like compilation, there are
 precompiled binaries). Installation guide is almost the same as for any other
-release ([OpenFOAM release & Homebrew](https://github.com/mrklein/openfoam-os-x/wiki/OpenFOAM%20release%20&%20Homebrew)),
+release ([OpenFOAM(R) release & Homebrew](https://github.com/mrklein/openfoam-os-x/wiki/OpenFOAM%20release%20&%20Homebrew)),
 except:
 
 1. Download URL is [OpenFOAM-v3.0+.tgz](https://sourceforge.net/projects/openfoamplus/files/OpenFOAM-v3.0+.tgz).
@@ -191,11 +310,11 @@ except:
 
 ## January 18, 2015
 
-Updated patch for development OpenFOAM branch.
+Updated patch for development OpenFOAM(R) branch.
 
 ## December 18, 2015
 
-1. Patch for OpenFOAM 3.0.1 (it was the same as the last 3.0.x patch)
+1. Patch for OpenFOAM(R) 3.0.1 (it was the same as the last 3.0.x patch)
 2. Since any way I am testing success of build process, decided to upload
    binary archives. More details can be found in [wiki](https://github.com/mrklein/openfoam-os-x/wiki/Binary-archives).
 
@@ -212,7 +331,7 @@ Major update.
    --append flags to run application and append to log-file).
 
 3. Just for fun added emulation of "silent rules" in 3.0.x. To turn this
-   feature on you need to set WM_SILENT_RULES to non-empty value (`export
+   feature on you need to set `WM_SILENT_RULES` to non-empty value (`export
    WM_SILENT_RULES=y` in `prefs.sh` will do the trick). And instead of
 
     ```
@@ -389,7 +508,7 @@ parmgridgen 0.0.1
 
 ## September 9, 2015
 
-Updated patches for OpenFOAM 2.3.1 and 2.4.0.
+Updated patches for OpenFOAM(R) 2.3.1 and 2.4.0.
 
 ## September 8, 2015
 
@@ -402,8 +521,8 @@ September 5.
 
 ## September 5, 2015
 
-Updated patches for 2.3.x (OpenFOAM-2.3.x-2f9138f.patch) and 2.4.x
-(OpenFOAM-2.4.x-8685344.patch) versions. This time decided not to be too
+Updated patches for 2.3.x (`OpenFOAM-2.3.x-2f9138f.patch`) and 2.4.x
+(`OpenFOAM-2.4.x-8685344.patch`) versions. This time decided not to be too
 invasive, so ended up with 50k patches (with stats). There were 3 general types
 of modifications:
 
@@ -414,10 +533,10 @@ of modifications:
 2. Clang's cpp does not fully support "traditional mode", so it does not
    understand continuations after comments. There were two variants: remove
    these comments or install traditional cpp. Chose the first variant.
-3. Warnings. First type comes from OpenFOAM's desire to take address of the
+3. Warnings. First type comes from OpenFOAM(R)'s desire to take address of the
    reference and the other one comes from third party software (updated CGAL).
-   First problem could be solved by -Wno-... flag, yet I have chosen
-   reinterpret_cast way. The second problem is solved by conditional
+   First problem could be solved by `-Wno-...` flag, yet I have chosen
+   `reinterpret_cast` way. The second problem is solved by conditional
    compilation and pragmas.
 
 Cause these patches were "fresh start", finally paid attention to and
@@ -464,11 +583,11 @@ parmgridgen 0.0.1
 
 ## July 31, 2015
 
-Added patch for OpenFOAM-dev (commit 40310a5). Though this time patch is less
+Added patch for `OpenFOAM-dev` (commit 40310a5). Though this time patch is less
 invasive, so maybe it will work with later commits.
 
-The patch is a continuation of an attempt to build OpenFOAM with `-Wall -Wextra
--std=c++11` flags.
+The patch is a continuation of an attempt to build OpenFOAM(TM) with `-Wall
+-Wextra -std=c++11` flags.
 
 1. register storage class is removed in dev-branch, so the only places where it
    appears are sources generated by flex. Added pragmas to suppress warnings.
@@ -476,17 +595,19 @@ The patch is a continuation of an attempt to build OpenFOAM with `-Wall -Wextra
    convenient to keep name of parameter since it a bit of documentation,
    sometimes parameters have names like `p`, yet for consistency I have decided
    to use comments everywhere). Patch was submitted upstream.
-4. printStack functionality uses only lldb. So implementation became simplified compared to 2.(3|4).x version.
+4. printStack functionality uses only lldb. So implementation became simplified
+   compared to 2.(3|4).x version.
 5. Boost and CGAL both have unused parameters and tautological comparison
    warnings, added pragmas around include lines to ignore them.
-6. Scotch decomposition method is disabled when OpenFOAM is build with
-   WM_LABEL_SIZE=64, since it requires recompilation of Scoth. Maybe later
+6. Scotch decomposition method is disabled when OpenFOAM(TM) is build with
+   `WM_LABEL_SIZE=64`, since it requires recompilation of Scoth. Maybe later
    I will create special Homebrew formula for this version.
 7. Clang on OS X does not want to do certain implicit conversions, so long.H
    and ulong.H headers were added to explicitly create Ostream methods for long
    and unsigned long types.
-8. Miscellaneous bugs where revealed due to no implicit type coercion (like
-   `if (mag(A > B))` instead of `if (mag(A) > B)`), they were fixed. Patches are submitted upstream.
+8. Miscellaneous bugs where revealed due to no implicit type coercion (like `if
+   (mag(A > B))` instead of `if (mag(A) > B)`), they were fixed. Patches are
+   submitted upstream.
 
 Since the patch is a fresh start compared to 2.3.x and 2.4.x versions, there could be certain bugs, which were not revealed by quick tutorials check. Use github Issues functionality to report them.
 
@@ -525,7 +646,7 @@ scotch 6.0.4_1
 
 ## June 5, 2015
 
-Added patches for OpenFOAM 2.4.0 and 2.4.x (commit b750988).
+Added patches for OpenFOAM(R) 2.4.0 and 2.4.x (commit b750988).
 
 The patches are an attempt to build OpenFOAM with -Wall -Wextra -std=c++11
 flags. The following appears after addition of the flags:
@@ -636,13 +757,13 @@ scotch 6.0.3
 
 ## Mar. 26, 2015
 
-1. Updated OpenFOAM 2.3.1 patch for new version of Scotch.
+1. Updated OpenFOAM(TM) 2.3.1 patch for new version of Scotch.
 2. Added patch to fix Scotch linking. Though patch was tested on 2.3.1, guess
    it will work on 2.3.0 and 2.2.x versions.
 
 ## Dec. 13, 2014
 
-Added patch for OpenFOAM 2.3.1. Build was tested on:
+Added patch for OpenFOAM(TM) 2.3.1. Build was tested on:
 
 ```
 myself at daphne in openfoam-os-x$ sw_vers

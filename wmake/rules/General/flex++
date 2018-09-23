@@ -1,0 +1,9 @@
+SUFFIXES += .L
+
+define Ltoo
+$(call WM_MESSAGE,LL,$(notdir $<))
+$(AT)flex -+ -o$(@D)/$(<F).C -f $<
+$(AT)$(CC) $(c++FLAGS) $(c++LESSWARN) -c $(@D)/$(<F).C -o $@
+endef
+
+#----------------------------- vi: set ft=make: -------------------------------

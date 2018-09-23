@@ -1,0 +1,11 @@
+SUFFIXES += .y
+
+define ytoo
+$(call WM_MESSAGE,yy,$(notdir $<))
+$(AT)byacc -v $(YYPREFIX) -d $<
+$(AT)mv y.tab.c $(@D)/$(<F).C
+$(AT)mv y.tab.h $(@D)/$(<F).H
+$(AT)$(CC) $(c++FLAGS) -c $(@D)/$(<F).C -o $@
+endef
+
+#----------------------------- vi: set ft=make: -------------------------------

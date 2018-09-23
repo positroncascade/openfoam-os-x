@@ -1,16 +1,16 @@
 class Scotch64 < Formula
-  desc "Software package for graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering"
+  desc "Package for graph and mesh partitioning. 64-bit indexing type."
   homepage "https://gforge.inria.fr/projects/scotch"
   url "https://gforge.inria.fr/frs/download.php/file/34618/scotch_6.0.4.tar.gz"
   sha256 "f53f4d71a8345ba15e2dd4e102a35fd83915abf50ea73e1bf6efe1bc2b4220c7"
   revision 1
 
+  keg_only "Conflicts with scotch formula"
+
   option "without-check", "skip build-time tests (not recommended)"
 
-  depends_on :mpi => :cc
+  depends_on "open-mpi"
   depends_on "xz" => :optional # Provides lzma compression.
-
-  keg_only "Conflicts with scotch formula"
 
   def install
     cd "src" do
@@ -29,8 +29,8 @@ class Scotch64 < Formula
       ldflags += %W[-L#{Formula["xz"].lib} -llzma] if build.with? "xz"
 
       make_args = ["CCS=#{ENV["CC"]}",
-                   "CCP=#{ENV["MPICC"]}",
-                   "CCD=#{ENV["MPICC"]}",
+                   "CCP=mpicc",
+                   "CCD=mpicc",
                    "RANLIB=echo",
                    "CFLAGS=#{cflags.join(" ")}",
                    "LDFLAGS=#{ldflags.join(" ")}"]

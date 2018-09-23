@@ -1,0 +1,19 @@
+SUFFIXES += .y .Y
+
+define ytoo
+$(call WM_MESSAGE,YY,$(notdir $<))
+$(AT)yacc -v -d $<
+$(AT)mv y.tab.c $(@D)/$(<F).c
+$(AT)mv y.tab.h $(@D)/parser.h
+$(AT)$(CC) $(c++FLAGS) -c $(@D)/$(<F).c -o $@
+endef
+
+define Ytoo
+$(call WM_MESSAGE,YY,$(notdir $<))
+$(AT)yacc -v -d $<
+$(AT)mv y.tab.c $(@D)/$(<F).C
+$(AT)mv y.tab.h $(@D)/parser.H
+$(AT)$(CC) $(c++FLAGS) -c $(@D)/$(<F).C -o $@
+endef
+
+#----------------------------- vi: set ft=make: -------------------------------
